@@ -3,24 +3,19 @@ import { setStorage, getStorage, removeStorage } from './storage';
 
 const form = document.querySelector('.feedback-form');
 const stotageKey = 'feedback-form-state';
-const storage = getStorage(stotageKey);
-let emailValue = '';
-let messageValue = '';
+let storage = getStorage(stotageKey);
+
+let formValue = {};
 
 form.addEventListener('input', throttle(onFormInput, 500));
 form.addEventListener('submit', onFormSubmit);
 
 function onFormInput(event) {
   // отримуємо та записуємо данні в сховище
-  if (event.target.name === 'email') {
-    emailValue = event.target.value;
-  }
+  formValue = storage;
+  formValue[event.target.name] = event.target.value;
 
-  if (event.target.name === 'message') {
-    messageValue = event.target.value;
-  }
-
-  setStorage(stotageKey, { Email: emailValue, Message: messageValue });
+  setStorage(stotageKey, formValue);
 }
 
 function onFormSubmit(event) {
@@ -35,16 +30,30 @@ function onFormSubmit(event) {
   }
 
   console.log({ Email: email.value, Message: message.value });
-  event.currentTarget.reset();
 
-  removeStorage(stotageKey);
+  formValue = { email: '', message: '' };
+  storage = formValue;
+  setStorage(stotageKey, formValue);
+  event.currentTarget.reset();
 }
 
 function containsАormValues() {
   // заповнюєо форму після завантаження
-  if (!storage) return;
-  form.elements.email.value = storage.Email;
-  form.elements.message.value = storage.Message;
-}
+  if (!storage) {
+    storage = {};
+    return;
+  }
 
+  if (storage.email === undefined) {
+    form.elements.email.value = '';
+  } else {
+    form.elements.email.value = storage.email;
+  }
+
+  if (storage.message === undefined) {
+    form.elements.message.value = '';
+  } else {
+    form.elements.message.value = storage.message;
+  }
+}
 containsАormValues();
