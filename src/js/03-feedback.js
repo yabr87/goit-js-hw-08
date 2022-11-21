@@ -4,17 +4,17 @@ import { setStorage, getStorage, removeStorage } from './storage';
 const form = document.querySelector('.feedback-form');
 const storageKey = 'feedback-form-state';
 let storage = getStorage(storageKey);
-let formValue = {};
+let formData = {};
 
 form.addEventListener('input', throttle(onFormInput, 500));
 form.addEventListener('submit', onFormSubmit);
 
 function onFormInput(event) {
   // отримуємо та записуємо данні в сховище
-  formValue = storage;
-  formValue[event.target.name] = event.target.value;
+  formData = storage;
+  formData[event.target.name] = event.target.value;
 
-  setStorage(storageKey, formValue);
+  setStorage(storageKey, formData);
 }
 
 function onFormSubmit(event) {
@@ -30,9 +30,9 @@ function onFormSubmit(event) {
 
   console.log({ Email: email.value, Message: message.value });
 
-  formValue = { email: '', message: '' };
-  storage = formValue;
-  setStorage(storageKey, formValue);
+  formData = { email: '', message: '' };
+  storage = formData;
+  setStorage(storageKey, formData);
   event.currentTarget.reset();
 }
 
