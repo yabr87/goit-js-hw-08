@@ -2,9 +2,8 @@ import throttle from 'lodash.throttle';
 import { setStorage, getStorage, removeStorage } from './storage';
 
 const form = document.querySelector('.feedback-form');
-const stotageKey = 'feedback-form-state';
-let storage = getStorage(stotageKey);
-
+const storageKey = 'feedback-form-state';
+let storage = getStorage(storageKey);
 let formValue = {};
 
 form.addEventListener('input', throttle(onFormInput, 500));
@@ -15,7 +14,7 @@ function onFormInput(event) {
   formValue = storage;
   formValue[event.target.name] = event.target.value;
 
-  setStorage(stotageKey, formValue);
+  setStorage(storageKey, formValue);
 }
 
 function onFormSubmit(event) {
@@ -33,7 +32,7 @@ function onFormSubmit(event) {
 
   formValue = { email: '', message: '' };
   storage = formValue;
-  setStorage(stotageKey, formValue);
+  setStorage(storageKey, formValue);
   event.currentTarget.reset();
 }
 
